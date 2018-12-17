@@ -16,6 +16,14 @@ _doc_header_check_version(dr4_doc_header_t* head)
 	       head->version[2] == DR4_VERSION_PATCH;	
 }
 
+extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path)
+{
+	FILE* fp;
+	head->path = file_path;
+	fp = fopen(file_path, "rb");
+	return fp;
+}
+
 int doc_header_from_file(dr4_doc_header_t* head, FILE* fp)
 {
 	unsigned char read_data[8];
@@ -23,7 +31,7 @@ int doc_header_from_file(dr4_doc_header_t* head, FILE* fp)
 	if(fread(read_data, 1, 8, fp) != 8)
 	{
 		head->report.has_err = 1;
-		sprintf(head->report.err, "Read Error: Failed to read document header.");
+		sprintf(head->report.err, "Read Error: Failed to read document header at '%s'\n.", head->path);
 		return 0;
 	}
 	// first is always magic sequence

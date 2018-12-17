@@ -2,6 +2,7 @@
 #define DR4_DOC_INFO_H
 
 #include <stdio.h>
+#include <string.h>
 
 #ifndef DR4_VERSION_RE
 #define DR4_VERSION_RE 1
@@ -31,7 +32,10 @@ typedef struct
 	unsigned char magic[3];
 	unsigned char version[3];
 	dr4_size_t sizer;
+	const char* path;
 } dr4_doc_header_t;
+
+extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path);
 
 extern int doc_header_from_file(dr4_doc_header_t* head, FILE* fp);
 
