@@ -16,11 +16,28 @@ _doc_header_check_version(dr4_doc_header_t* head)
 	       head->version[2] == DR4_VERSION_PATCH;	
 }
 
+extern int doc_header_check_magic(dr4_doc_header_t* head)
+{
+	return _doc_header_check_magic(head);
+}
+
+extern int doc_header_check_version(dr4_doc_header_t* head)
+{
+	return _doc_header_check_version(head);
+}
+
 extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path)
 {
 	FILE* fp;
 	head->path = file_path;
 	fp = fopen(file_path, "rb");
+	if(fp == NULL)
+	{
+		head->report.has_err = 1;
+		sprintf(head->report.err, "File Error: Cannot open file at '%s'\n", file_path);
+		return NULL;
+	}
+	memset(&(head->report), 0, sizeof(dr4_doc_header_report_t));
 	return fp;
 }
 

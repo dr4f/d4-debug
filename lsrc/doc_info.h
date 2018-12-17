@@ -34,6 +34,14 @@ typedef struct
 	dr4_size_t sizer;
 	const char* path;
 } dr4_doc_header_t;
+/**
+ * Extern alias function to validate a magic sequence.
+ */
+extern int doc_header_check_magic(dr4_doc_header_t* head);
+/**
+ * Extern alias function to validate a dr4 version.
+ */
+extern int doc_header_check_version(dr4_doc_header_t* head);
 
 extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path);
 
