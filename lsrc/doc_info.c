@@ -62,3 +62,8 @@ int doc_header_from_file(dr4_doc_header_t* head, FILE* fp)
 	head->sizer = read_data[6];
 	return 1;
 }
+
+extern void doc_header_make_report(dr4_doc_header_t* head)
+{
+	
+}

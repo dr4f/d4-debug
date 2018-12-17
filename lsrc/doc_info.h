@@ -42,10 +42,15 @@ extern int doc_header_check_magic(dr4_doc_header_t* head);
  * Extern alias function to validate a dr4 version.
  */
 extern int doc_header_check_version(dr4_doc_header_t* head);
-
+/**
+ * Opens the file for a header and writes the file path to
+ * the header struct.
+ */
 extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path);
 
 extern int doc_header_from_file(dr4_doc_header_t* head, FILE* fp);
+
+extern void doc_header_make_report(dr4_doc_header_t* head);
 
 
 #endif // DR4_DOC_INFO_H
