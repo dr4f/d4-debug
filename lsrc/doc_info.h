@@ -19,6 +19,11 @@
 
 typedef unsigned char dr4_size_t;
 
+/*Typed Sizer Constants*/
+static const dr4_size_t DR4_SIZER_8 = 8;
+static const dr4_size_t DR4_SIZER_16 = 16;
+static const dr4_size_t DR4_SIZER_32 = 32;
+
 typedef struct
 {
 	char report[256];
@@ -47,7 +52,10 @@ extern int doc_header_check_version(dr4_doc_header_t* head);
  * the header struct.
  */
 extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path);
-
+/**
+ * Extracts 8 bytes from file to find header data. Returns 0 if file cannot be opened,
+ * or error in reading exactly 8 bytes.
+ */
 extern int doc_header_from_file(dr4_doc_header_t* head, FILE* fp);
 
 extern void doc_header_make_report(dr4_doc_header_t* head);
