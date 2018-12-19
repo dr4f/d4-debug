@@ -26,7 +26,7 @@ static const dr4_size_t DR4_SIZER_32 = 32;
 
 typedef struct
 {
-	char report[256];
+	char report[1024];
 	char err[256];
 	int has_err;
 } dr4_doc_header_report_t;
@@ -47,6 +47,10 @@ extern int doc_header_check_magic(dr4_doc_header_t* head);
  * Extern alias function to validate a dr4 version.
  */
 extern int doc_header_check_version(dr4_doc_header_t* head);
+/**
+ * External alias function to check sizer.
+ */
+extern int doc_header_check_sizer(dr4_doc_header_t* head);
 /**
  * Opens the file for a header and writes the file path to
  * the header struct.

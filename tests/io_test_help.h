@@ -42,5 +42,8 @@ extern FILE* io_test_real_open(void);
  * the tmpfile and rewinds.
  */
 extern FILE* io_test_dump_fake(void* data, size_t n);
+/* Helper function to assert the outputs of reporting or string writing functions
+ */
+extern const char* io_test_find_subs(const char* string, const char* substring);
 
 #endif // IO_TEST_HELPERS_H

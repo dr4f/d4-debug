@@ -46,3 +46,38 @@ FILE* io_test_dump_fake(void* data, size_t n)
 	return fp;
 }
 
+const char* io_test_find_subs(const char* string, const char* substring) {
+  int on = 0;
+  const char* index = NULL;
+  const char* traverse = substring; // resettable
+  while(*string)
+  {
+    if(on)
+    {
+      if(!*traverse) return index;
+      else if(*traverse == *string)
+      {
+        traverse++;
+      }
+      else
+      {
+        traverse = substring;
+        index = NULL;
+        on = 0;
+      }
+    }
+    else
+    {
+      if(*string == *substring)
+      {
+        on = 1;
+        index = string;
+        traverse++;
+      }
+    }
+    string++;
+  }
+  if(!*traverse) return index;
+  else return NULL;
+}
+
