@@ -35,9 +35,29 @@ void test_doc_header_from_file(void)
 	fclose(test_fp);
 }
 
+void test_doc_header_make_report(void)
+{
+	dr4_doc_header_t head;
+	FILE* test_fp;
+	int head_result;
+	unsigned char test_data[8] = {
+		83, 94, 121,
+		1, 0, 0,
+		32, 0
+	};
+	test_fp = io_test_dump_fake(test_data, 8);
+	head_result = doc_header_from_file(&head, test_fp);
+	TEST_FAIL_CHECK(head_result == 1);
+	doc_header_make_report(&head);
+	printf("%s", head.report.report);
+	TEST_FAIL_CHECK(io_test_find_subs(head.report.report, "Version: (Valid)") != NULL);
+	TEST_FAIL_CHECK(io_test_find_subs(head.report.report, "Magic Seq: (Valid)") != NULL);
+}
+
 int main(int argc, char const *argv[])
 {
 	test_doc_header_check_magic();
 	test_doc_header_from_file();
+	test_doc_header_make_report();
 	TEST_FAIL_RETURN
 }

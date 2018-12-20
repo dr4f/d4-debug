@@ -3,7 +3,7 @@
 static const char* DOC_H_REPORT_FMT = "Magic Seq: (%s) |%u, %u, %u|\n"
                                       "Version: (%s) |%u, %u, %u|\n"
                                       "Sizer: (%s) %u\n"
-                                      "Errors: (%s) = %s";
+                                      "Errors: (%s) = %s\n";
 
 static inline int 
 _doc_header_check_magic(dr4_doc_header_t* head)
