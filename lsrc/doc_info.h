@@ -57,6 +57,10 @@ extern int doc_header_check_sizer(dr4_doc_header_t* head);
  */
 extern FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path);
 /**
+ * Initializes a doc header struct without opening a file, used mainly for testing.
+ */
+extern void doc_header_init_nof(dr4_doc_header_t* head);
+/**
  * Extracts 8 bytes from file to find header data. Returns 0 if file cannot be opened,
  * or error in reading exactly 8 bytes.
  */

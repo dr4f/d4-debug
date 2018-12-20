@@ -59,6 +59,12 @@ FILE* doc_header_init(dr4_doc_header_t* head, const char* file_path)
 	return fp;
 }
 
+void doc_header_init_nof(dr4_doc_header_t* head)
+{
+	head->path = NULL;
+	memset(&(head->report), 0, sizeof(dr4_doc_header_report_t));
+}
+
 int doc_header_from_file(dr4_doc_header_t* head, FILE* fp)
 {
 	unsigned char read_data[8];

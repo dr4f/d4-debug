@@ -2,6 +2,8 @@
 #include "io_test_help.h"
 #include "doc_info.h"
 
+#include <string.h>
+
 
 
 
@@ -45,6 +47,7 @@ void test_doc_header_make_report(void)
 		1, 0, 0,
 		32, 0
 	};
+	memset(&(head.report), 0, sizeof(dr4_doc_header_report_t));
 	test_fp = io_test_dump_fake(test_data, 8);
 	head_result = doc_header_from_file(&head, test_fp);
 	TEST_FAIL_CHECK(head_result == 1);
