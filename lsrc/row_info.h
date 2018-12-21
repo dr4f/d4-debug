@@ -18,7 +18,7 @@
 /* Determines the default size when initializing a row
  */
 #ifndef DR4_ROW_INFO_DEFAULT
-#define DR4_ROW_INFO_DEFAULT 100
+#define DR4_ROW_INFO_DEFAULT 128
 #endif
 
 /**
@@ -50,8 +50,12 @@ typedef struct
 	void* content;
 } dr4_row_32b_t;
 
-
+/**
+ * Initializes a row with the default size for it's content buffer.
+ */
 extern void row_info_init_row(dr4_row_t* row);
+
+extern void row_info_free_row(dr4_row_t* row);
 
 
 #endif // DR4_ROW_INFO_H
