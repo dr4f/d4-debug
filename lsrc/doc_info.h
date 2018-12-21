@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "dr4_size_type.h"
+
 #ifndef DR4_VERSION_RE
 #define DR4_VERSION_RE 1
 #endif // DR4_VERSION_RE
@@ -15,14 +17,6 @@
 #ifndef DR4_VERSION_PATCH
 #define DR4_VERSION_PATCH 0
 #endif // DR4_VERSION_PATCH
-
-
-typedef unsigned char dr4_size_t;
-
-/*Typed Sizer Constants*/
-static const dr4_size_t DR4_SIZER_8 = 8;
-static const dr4_size_t DR4_SIZER_16 = 16;
-static const dr4_size_t DR4_SIZER_32 = 32;
 
 typedef struct
 {

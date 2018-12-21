@@ -20,6 +20,7 @@ add_subdirectory(tests)
 
 SET(dr4_debug_sources
     lsrc/doc_info.c
+    lsrc/row_info.c
 )
 
 # dr4-debug defs #
