@@ -15,6 +15,12 @@
  */
 #define DR4_ROW_INFO_BASE dr4_size_t size_type;
 
+/* Determines the default size when initializing a row
+ */
+#ifndef DR4_ROW_INFO_DEFAULT
+#define DR4_ROW_INFO_DEFAULT 100
+#endif
+
 /**
  * The base or "parent" struct for the size-specific rows.
  */
@@ -45,7 +51,7 @@ typedef struct
 } dr4_row_32b_t;
 
 
-extern void row_info_init_row(dr4_row_t* row, dr4_size_t type);
+extern void row_info_init_row(dr4_row_t* row);
 
 
 #endif // DR4_ROW_INFO_H
