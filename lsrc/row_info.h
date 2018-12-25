@@ -54,8 +54,12 @@ typedef struct
  * Initializes a row with the default size for it's content buffer.
  */
 extern void row_info_init_row(dr4_row_t* row);
-
+/*
+ * Frees the memory buffer inside a row struct.
+ */
 extern void row_info_free_row(dr4_row_t* row);
+
+extern void row_info_expand_row(dr4_row_t* row, size_t new_size);
 
 
 #endif // DR4_ROW_INFO_H
