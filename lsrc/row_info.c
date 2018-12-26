@@ -76,15 +76,15 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 	{
 		case DR4_SIZER_8:
 		    size_type_of_row = 1;
-		    row_buffer = ((dr4_row_8b_t*)row)->content
+		    row_buffer = ((dr4_row_8b_t*)row)->content;
 		    break;
 		case DR4_SIZER_16:
 		    size_type_of_row = sizeof(uint16_t);
-		    row_buffer = ((dr4_row_16b_t*)row)->content
+		    row_buffer = ((dr4_row_16b_t*)row)->content;
 		    break;
 		case DR4_SIZER_32:
 		    size_type_of_row = sizeof(uint32_t);
-		    row_buffer = ((dr4_row_32b_t*)row)->content
+		    row_buffer = ((dr4_row_32b_t*)row)->content;
 		    break;
 		default:
 		   HANDLE_UNKNOWN_SIZER(row);
@@ -119,4 +119,39 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 		   HANDLE_UNKNOWN_SIZER(row);
 	}
 	return 1;
+}
+
+
+static int row_info_report_8b(dr4_row_8b_t* row)
+{
+	unsigned char* buf = (unsigned char*)(row->content);
+	return 0;
+}
+
+static int row_info_report_16b(dr4_row_16b_t* row)
+{
+	return 0;
+}
+
+static int row_info_report_32b(dr4_row_32b_t* row)
+{
+	return 0;
+}
+
+void row_info_report_row(dr4_row_t* row, dr4_row_err_t* errs)
+{
+	switch(row->size_type)
+	{
+		case DR4_SIZER_8:
+		     errs->count += row_info_report_8b((dr4_row_8b_t*)row);
+		     return;
+		case DR4_SIZER_16:
+		     errs->count += row_info_report_16b((dr4_row_16b_t*)row);
+		     return;
+		case DR4_SIZER_32:
+		     errs->count += row_info_report_32b((dr4_row_32b_t*)row);
+		     return;
+		default:
+		  HANDLE_UNKNOWN_SIZER(row);
+	}
 }

@@ -68,7 +68,17 @@ extern void row_info_expand_row(dr4_row_t* row, size_t new_size);
  */
 extern int row_info_read_row(dr4_row_t* row, FILE* fp);
 
-extern int row_info_report_row(dr4_row_t* row);
+/**
+ * This struct is intended to keep track of how many errors occur while making
+ * a row's report. Such errors include invalid types, invalid data to types, 
+ * and invalid lengths (e.g len of row can never be zero).
+ */
+typedef struct
+{
+	int count;
+} dr4_row_err_t;
+
+extern void row_info_report_row(dr4_row_t* row, dr4_row_err_t* errs);
 
 
 #endif // DR4_ROW_INFO_H
