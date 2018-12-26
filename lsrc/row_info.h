@@ -58,8 +58,15 @@ extern void row_info_init_row(dr4_row_t* row);
  * Frees the memory buffer inside a row struct.
  */
 extern void row_info_free_row(dr4_row_t* row);
-
+/* Expands and increases the size of the row.
+ */
 extern void row_info_expand_row(dr4_row_t* row, size_t new_size);
+/**
+ * Reads a row from the file into the row struct.
+ * If the end document padding is encountered (4 bytes of 0), the function returns 0.
+ * otherwise, reading is successful, and returns 1.
+ */
+extern int row_info_read_row(dr4_row_t* row, FILE* fp);
 
 
 #endif // DR4_ROW_INFO_H
