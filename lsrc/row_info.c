@@ -95,23 +95,25 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 		// End of document is reached, 0000 padding is found.
 		return 0;
 	}
-
 	switch(row->size_type)
 	{
 		case DR4_SIZER_8:
-		    if(size_read > ROW_SIZE_REF(row, dr4_row_8b_t)) row_info_expand_row(row, size_read); 
+		    if(size_read > ROW_SIZE_REF(row, dr4_row_8b_t)) 
+		    	 row_info_expand_row(row, size_read); 
 		    ((dr4_row_8b_t*)row)->size = (unsigned char)size_read;
-		    fread(row_buffer, 1, size_read, fp);
+		    fread(row_buffer, 1, size_read - 1, fp);
 		    break;
 		case DR4_SIZER_16:
-		    if(size_read > ROW_SIZE_REF(row, dr4_row_16b_t)) row_info_expand_row(row, size_read); 
+		    if(size_read > ROW_SIZE_REF(row, dr4_row_16b_t)) 
+		    	row_info_expand_row(row, size_read); 
 		    ((dr4_row_16b_t*)row)->size = (uint16_t)size_read;
-		    fread(row_buffer, sizeof(uint16_t), size_read, fp);
+		    fread(row_buffer, sizeof(uint16_t), size_read - sizeof(uint16_t), fp);
 		    break;
 		case DR4_SIZER_32:
-		    if(size_read > ROW_SIZE_REF(row, dr4_row_32b_t)) row_info_expand_row(row, size_read); 
+		    if(size_read > ROW_SIZE_REF(row, dr4_row_32b_t)) 
+		    	 row_info_expand_row(row, size_read); 
 		    ((dr4_row_32b_t*)row)->size = (uint32_t)size_read;
-		    fread(row_buffer, sizeof(uint32_t), size_read, fp);
+		    fread(row_buffer, sizeof(uint32_t), size_read - sizeof(uint32_t), fp);
 		    break;
 		default:
 		   HANDLE_UNKNOWN_SIZER(row);

@@ -68,5 +68,7 @@ extern void row_info_expand_row(dr4_row_t* row, size_t new_size);
  */
 extern int row_info_read_row(dr4_row_t* row, FILE* fp);
 
+extern int row_info_report_row(dr4_row_t* row);
+
 
 #endif // DR4_ROW_INFO_H
