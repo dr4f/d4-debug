@@ -141,9 +141,14 @@ static int row_info_report_8b(dr4_row_8b_t* row)
 	unsigned char* row_offsets;
 	unsigned char* row_body;
 	unsigned char* buf = (unsigned char*)(row->content);
+	int err_total = 0;
 	row_len = buf;
 	row_offsets = row_len + 1;
 	row_body = row_offsets + (*row_len);
+	if(*row_len > row->size)
+	{
+		++err_total;
+	}
 	printf("size: %u, len: %u, ", row->size, *row_len);
 	printf("offsets: [");
 	for(unsigned i = 0; i < *row_len; i++)
@@ -152,7 +157,12 @@ static int row_info_report_8b(dr4_row_8b_t* row)
 		if(i < ((*row_len) - 1)) printf(", ");
 	}
 	printf("], data:[");
-	return 0;
+	for(unsigned j = 0; j < *row_len; j++)
+	{
+		err_total += row_info_print_value(row_body + row_offsets[j]);
+		if(j < ((*row_len) - 1)) printf(", ");
+	}
+	return err_total;
 }
 
 static int row_info_report_16b(dr4_row_16b_t* row)
