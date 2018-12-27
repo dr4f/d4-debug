@@ -1,4 +1,5 @@
 #include "row_info.h"
+#include "dr4_types.h"
 #include <string.h>
 
 #define HANDLE_UNKNOWN_SIZER(row) \
@@ -6,6 +7,8 @@
                exit(3)
 
 #define ROW_SIZE_REF(row, type) (((type*)row)->size)
+
+#define ROW_PRINT_PREF printf("(row)-> ")
 
 void row_info_init_row(dr4_row_t* row)
 {
@@ -121,10 +124,34 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 	return 1;
 }
 
+static int row_info_print_value(unsigned char* data)
+{
+	switch(*data)
+	{
+		default:
+		    fprintf(stderr, "Type Error: Found unknown dr4 type with mark %u\n", *data);
+		    return 1;
+	}
+	return 0;
+}
 
 static int row_info_report_8b(dr4_row_8b_t* row)
 {
+	unsigned char* row_len;
+	unsigned char* row_offsets;
+	unsigned char* row_body;
 	unsigned char* buf = (unsigned char*)(row->content);
+	row_len = buf;
+	row_offsets = row_len + 1;
+	row_body = row_offsets + (*row_len);
+	printf("size: %u, len: %u, ", row->size, *row_len);
+	printf("offsets: [");
+	for(unsigned i = 0; i < *row_len; i++)
+	{
+		printf("%u", row_offsets[i]);
+		if(i < ((*row_len) - 1)) printf(", ");
+	}
+	printf("], data:[");
 	return 0;
 }
 
@@ -140,6 +167,7 @@ static int row_info_report_32b(dr4_row_32b_t* row)
 
 void row_info_report_row(dr4_row_t* row, dr4_row_err_t* errs)
 {
+	ROW_PRINT_PREF;
 	switch(row->size_type)
 	{
 		case DR4_SIZER_8:
