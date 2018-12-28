@@ -128,11 +128,20 @@ static int row_info_print_value(unsigned char* data)
 {
 	switch(*data)
 	{
+		case DR4_TYPE_STOP:
+		    // this shouldn't be reached 
+		    fprintf(stderr, "  <Offset Error: Found STOP type as data value in row offset.>");
+		    return 1;
+		case DR4_TYPE_NONE:
+		    printf("None");
+		    return 0;
+		case DR4_TYPE_BOOL:
+		    printf("Bool: %s", data[1] ? "true" : "false");
+		    return 0;
 		default:
-		    fprintf(stderr, "Type Error: Found unknown dr4 type with mark %u\n", *data);
+		    fprintf(stderr, "  <Type Error: Found unknown dr4 type with mark %u>", *data);
 		    return 1;
 	}
-	return 0;
 }
 
 static int row_info_report_8b(dr4_row_8b_t* row)
@@ -162,17 +171,70 @@ static int row_info_report_8b(dr4_row_8b_t* row)
 		err_total += row_info_print_value(row_body + row_offsets[j]);
 		if(j < ((*row_len) - 1)) printf(", ");
 	}
+	printf("]\n");
 	return err_total;
 }
 
 static int row_info_report_16b(dr4_row_16b_t* row)
 {
-	return 0;
+	uint16_t* row_len;
+	uint16_t* row_offsets;
+	unsigned char* row_body;
+	uint16_t* buf = (uint16_t*)(row->content);
+	int err_total = 0;
+	row_len = buf;
+	row_offsets = row_len + sizeof(uint16_t);
+	row_body = (unsigned char*)row_offsets + (*row_len);
+	if(*row_len > row->size)
+	{
+		++err_total;
+	}
+	printf("size: %u, len: %u, ", row->size, *row_len);
+	printf("offsets: [");
+	for(unsigned i = 0; i < *row_len; i++)
+	{
+		printf("%u", row_offsets[i]);
+		if(i < ((*row_len) - 1)) printf(", ");
+	}
+	printf("], data:[");
+	for(unsigned j = 0; j < *row_len; j++)
+	{
+		err_total += row_info_print_value(row_body + row_offsets[j]);
+		if(j < ((*row_len) - 1)) printf(", ");
+	}
+	printf("]\n");
+	return err_total;
 }
 
 static int row_info_report_32b(dr4_row_32b_t* row)
 {
-	return 0;
+	uint32_t* row_len;
+	uint32_t* row_offsets;
+	unsigned char* row_body;
+	uint32_t* buf = (uint32_t*)(row->content);
+	int err_total = 0;
+	row_len = buf;
+	row_offsets = row_len + sizeof(uint32_t);
+	row_body = (unsigned char*)row_offsets + (*row_len);
+	if(*row_len > row->size)
+	{
+		++err_total;
+	}
+	printf("size: %u, len: %u, ", row->size, *row_len);
+	printf("offsets: [");
+	for(unsigned i = 0; i < *row_len; i++)
+	{
+		printf("%u", row_offsets[i]);
+		if(i < ((*row_len) - 1)) printf(", ");
+	}
+	printf("], data:[");
+	for(unsigned j = 0; j < *row_len; j++)
+	{
+		err_total += row_info_print_value(row_body + row_offsets[j]);
+		if(j < ((*row_len) - 1)) printf(", ");
+	}
+	printf("]\n");
+	return err_total;
 }
 
 void row_info_report_row(dr4_row_t* row, dr4_row_err_t* errs)
