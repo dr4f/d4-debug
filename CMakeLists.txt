@@ -16,6 +16,7 @@ string(TIMESTAMP dr4_build_time)
 # Enables Testing for project #
 enable_testing()
 
+add_subdirectory(examples)
 add_subdirectory(tests)
 
 SET(dr4_debug_sources

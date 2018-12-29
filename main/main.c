@@ -2,7 +2,23 @@
 #include "doc_info.h"
 #include "row_info.h"
 
-
+/* Function actually responsible for executing print calls
+ * and checking for termination.
+ */
+static void print_rows_info(dr4_row_t* row, FILE* fp)
+{
+	dr4_row_err_t row_err;
+	int row_continue;
+	row_continue = 1;
+	row_err.count = 0;
+	while(row_continue)
+	{
+		row_continue = row_info_read_row(row, fp);
+		if(!row_continue) break;
+		row_info_report_row(row, &row_err);
+	}
+	printf("----The document counted %d row errrors----\n", row_err.count);
+}
 
 
 /**
@@ -17,6 +33,7 @@ static int print_file_info(const char* file_path)
     dr4_row_8b_t row8;
     dr4_row_16b_t row16;
     dr4_row_32b_t row32;
+    dr4_row_t* used_row;
 	fp = doc_header_init(&doc, file_path);
 	if(fp == NULL)
 	{
@@ -29,20 +46,28 @@ static int print_file_info(const char* file_path)
 		return 0;
 	}
 	doc_header_make_report(&doc);
-
+	// prints the actual header report.
+	printf("%s", doc.report.report);
 	// rows phase
 	switch(doc.sizer)
 	{
 		case DR4_SIZER_8:
+		     used_row = (dr4_row_t*)&row8;
 		     break;
 		case DR4_SIZER_16:
+		     used_row = (dr4_row_t*)&row16;
 		     break;
 		case DR4_SIZER_32:
+		     used_row = (dr4_row_t*)&row32;
 		     break;
 		default:
 		   fprintf(stderr, "Size Error: Got unknown sizer type: %u\n", doc.sizer);
 		   return 0;
 	}
+	used_row->size_type = doc.sizer;
+	row_info_init_row(used_row);
+	print_rows_info(used_row, fp);
+	row_info_free_row(used_row);
 	return 1;
 }
 
