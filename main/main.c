@@ -8,16 +8,20 @@
 static void print_rows_info(dr4_row_t* row, FILE* fp)
 {
 	dr4_row_err_t row_err;
+	unsigned row_count;
 	int row_continue;
 	row_continue = 1;
 	row_err.count = 0;
+	row_count = 0;
 	while(row_continue)
 	{
 		row_continue = row_info_read_row(row, fp);
 		if(!row_continue) break;
 		row_info_report_row(row, &row_err);
+		++row_count;
 	}
 	printf("----The document counted %d row errrors----\n", row_err.count);
+	printf("----The document counted %u rows-----------\n", row_count);
 }
 
 
