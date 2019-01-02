@@ -26,3 +26,7 @@ To run the tests, you just use "make test", from `CMAKE`. You can run the comman
 ```
 $ make test
 ```
+
+## Examples
+
+In the `examples/` directory, you can find a script called `dr4gen.py`. Running that script with one argument as the path name will generate a sample `dr4` document file you can test the `dr4-debug` executable on.
