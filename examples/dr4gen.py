@@ -93,7 +93,11 @@ class Dr4Doc(object):
 		self.body = Dr4Body(sizer)
 
 	def __repr__(self):
-		return str(self.head) + str(self.body)
+		"""
+		The Dr4Doc class is a conjoining class of header and body, 
+		But caps the rows with the 4 byte end sequence for a document.
+		"""
+		return str(self.head) + str(self.body) + struct.pack('BBBB', 0, 0, 0, 0)
 
 
 if __name__ == '__main__':

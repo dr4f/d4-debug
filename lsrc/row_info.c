@@ -51,6 +51,7 @@ void row_info_free_row(dr4_row_t* row)
 
 void row_info_expand_row(dr4_row_t* row, size_t new_size)
 {
+	printf("$--Expanding Row at %p to new size %lu--$\n", row, new_size);
 	switch(row->size_type)
 	{
 		case DR4_SIZER_8:
@@ -96,13 +97,15 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 	if(size_read == 0)
 	{
 		// End of document is reached, 0000 padding is found.
+		puts("End of dr4 document reached, found sequence \\x00\\x00\\x00\\x00");
 		return 0;
 	}
+	printf("---Reading row with size: %lu---\n", size_read);
 	switch(row->size_type)
 	{
 		case DR4_SIZER_8:
 		    if(size_read > ROW_SIZE_REF(row, dr4_row_8b_t)) 
-		    	 row_info_expand_row(row, size_read); 
+		    	 row_info_expand_row(row, size_read);
 		    ((dr4_row_8b_t*)row)->size = (unsigned char)size_read;
 		    fread(row_buffer, 1, size_read - 1, fp);
 		    break;
@@ -110,13 +113,13 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 		    if(size_read > ROW_SIZE_REF(row, dr4_row_16b_t)) 
 		    	row_info_expand_row(row, size_read); 
 		    ((dr4_row_16b_t*)row)->size = (uint16_t)size_read;
-		    fread(row_buffer, sizeof(uint16_t), size_read - sizeof(uint16_t), fp);
+		    fread(row_buffer, 1, size_read - sizeof(uint16_t), fp);
 		    break;
 		case DR4_SIZER_32:
 		    if(size_read > ROW_SIZE_REF(row, dr4_row_32b_t)) 
 		    	 row_info_expand_row(row, size_read); 
 		    ((dr4_row_32b_t*)row)->size = (uint32_t)size_read;
-		    fread(row_buffer, sizeof(uint32_t), size_read - sizeof(uint32_t), fp);
+		    fread(row_buffer, 1, size_read - sizeof(uint32_t), fp);
 		    break;
 		default:
 		   HANDLE_UNKNOWN_SIZER(row);
@@ -146,6 +149,7 @@ static int row_info_print_value(unsigned char* data)
 
 static int row_info_report_8b(dr4_row_8b_t* row)
 {
+	printf("$--Making report for 8b row at %p--$\n", row);
 	unsigned char* row_len;
 	unsigned char* row_offsets;
 	unsigned char* row_body;
@@ -154,6 +158,10 @@ static int row_info_report_8b(dr4_row_8b_t* row)
 	row_len = buf;
 	row_offsets = row_len + 1;
 	row_body = row_offsets + (*row_len);
+	printf("$--Setup Row report, row len at: %p, row_offsets at %p, row_body at %p--$\n",
+		                          row_len,
+		                          row_offsets,
+		                          row_body);
 	if(*row_len > row->size)
 	{
 		++err_total;
@@ -183,7 +191,7 @@ static int row_info_report_16b(dr4_row_16b_t* row)
 	uint16_t* buf = (uint16_t*)(row->content);
 	int err_total = 0;
 	row_len = buf;
-	row_offsets = row_len + sizeof(uint16_t);
+	row_offsets = row_len + 1;
 	row_body = (unsigned char*)row_offsets + (*row_len);
 	if(*row_len > row->size)
 	{
@@ -214,7 +222,7 @@ static int row_info_report_32b(dr4_row_32b_t* row)
 	uint32_t* buf = (uint32_t*)(row->content);
 	int err_total = 0;
 	row_len = buf;
-	row_offsets = row_len + sizeof(uint32_t);
+	row_offsets = row_len + 1;
 	row_body = (unsigned char*)row_offsets + (*row_len);
 	if(*row_len > row->size)
 	{
@@ -243,12 +251,15 @@ void row_info_report_row(dr4_row_t* row, dr4_row_err_t* errs)
 	switch(row->size_type)
 	{
 		case DR4_SIZER_8:
+		     puts("---- 8bit sized row found ----");
 		     errs->count += row_info_report_8b((dr4_row_8b_t*)row);
 		     return;
 		case DR4_SIZER_16:
+		     puts("---- 16bit sized row found ----");
 		     errs->count += row_info_report_16b((dr4_row_16b_t*)row);
 		     return;
 		case DR4_SIZER_32:
+		     puts("---- 32bit sized row found ----");
 		     errs->count += row_info_report_32b((dr4_row_32b_t*)row);
 		     return;
 		default:

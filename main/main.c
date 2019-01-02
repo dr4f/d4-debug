@@ -52,6 +52,7 @@ static int print_file_info(const char* file_path)
 	doc_header_make_report(&doc);
 	// prints the actual header report.
 	printf("%s", doc.report.report);
+	printf("-----Reading rows in document-------\n");
 	// rows phase
 	switch(doc.sizer)
 	{
