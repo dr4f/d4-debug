@@ -73,9 +73,9 @@ void row_info_expand_row(dr4_row_t* row, size_t new_size)
 
 int row_info_read_row(dr4_row_t* row, FILE* fp)
 {
+	void* row_buffer;
 	unsigned long size_read = 0;
 	size_t size_type_of_row = 0;
-	void* row_buffer;
 	switch(row->size_type)
 	{
 		case DR4_SIZER_8:
@@ -93,7 +93,6 @@ int row_info_read_row(dr4_row_t* row, FILE* fp)
 		default:
 		   HANDLE_UNKNOWN_SIZER(row);
 	}
-	(void) fread(&size_read, size_type_of_row, 1, fp);
 	if(size_read == 0)
 	{
 		// End of document is reached, 0000 padding is found.
@@ -176,6 +175,7 @@ static int row_info_report_8b(dr4_row_8b_t* row)
 	printf("], data:[");
 	for(unsigned j = 0; j < *row_len; j++)
 	{
+		printf("$--Printing Item for offset: %u, from body: %p, at offset %p--$\n", row_offsets[j], row_body, row_body + row_offsets[j]);
 		err_total += row_info_print_value(row_body + row_offsets[j]);
 		if(j < ((*row_len) - 1)) printf(", ");
 	}
